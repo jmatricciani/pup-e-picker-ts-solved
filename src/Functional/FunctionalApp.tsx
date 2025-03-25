@@ -17,30 +17,30 @@ export function FunctionalApp() {
     refetchData();
   }, []);
 
-  const refetchData = () => {
-    return Requests.getAllDogs().then(setDogs);
+  const refetchData = async () => {
+    setDogs(await Requests.getAllDogs());
   };
 
-  const addDog = (dog: Omit<Dog, "id">) => {
+  const addDog = async (dog: Omit<Dog, "id">) => {
     setIsLoading(true);
-    Requests.postDog(dog)
-      .then(refetchData)
-      .then(() => toast.success("Dog Created"))
-      .finally(() => setIsLoading(false));
+    await Requests.postDog(dog);
+    refetchData();
+    toast.success("Dog Created");
+    setIsLoading(false);
   };
 
-  const deleteDog = (id: number) => {
+  const deleteDog = async (id: number) => {
     setIsLoading(true);
-    Requests.deleteDog(id)
-      .then(refetchData)
-      .finally(() => setIsLoading(false));
+    await Requests.deleteDog(id);
+    refetchData();
+    setIsLoading(false);
   };
 
-  const updateDog = (id: number, isFavorite: boolean) => {
+  const updateDog = async (id: number, isFavorite: boolean) => {
     setIsLoading(true);
-    Requests.updateDog(id, isFavorite)
-      .then(refetchData)
-      .finally(() => setIsLoading(false));
+    await Requests.updateDog(id, isFavorite);
+    refetchData();
+    setIsLoading(false);
   };
 
   return (
