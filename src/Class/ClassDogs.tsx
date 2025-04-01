@@ -1,6 +1,6 @@
-import { DogCard } from "../Shared/DogCard";
-import { Component } from "react";
-import { IDisplayDogs } from "../types";
+import { DogCard } from '../Shared/DogCard';
+import { Component } from 'react';
+import { IDisplayDogs } from '../types';
 
 export class ClassDogs extends Component<IDisplayDogs> {
   render() {
@@ -8,10 +8,16 @@ export class ClassDogs extends Component<IDisplayDogs> {
       <>
         {this.props.dogs
           .filter((dog) => {
-            if (this.props.isFavoriteActive) return dog.isFavorite;
-            else if (this.props.isNotFavoriteActive) return !dog.isFavorite;
-            else if (this.props.isCreateDogActive) return false;
-            else return dog;
+            switch (this.props.activeTab) {
+              case 'favorited':
+                return dog.isFavorite;
+              case 'unfavorited':
+                return !dog.isFavorite;
+              case 'createDog':
+                return false;
+              case 'none':
+                return dog;
+            }
           })
           .map((dog) => (
             <DogCard

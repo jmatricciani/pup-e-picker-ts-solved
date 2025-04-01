@@ -1,17 +1,21 @@
-import { Component } from "react";
-import { ClassSection } from "./ClassSection";
-import { ClassDogs } from "./ClassDogs";
-import { ClassCreateDogForm } from "./ClassCreateDogForm";
-import { Requests } from "../api";
-import { Dog } from "../types";
-import toast from "react-hot-toast";
+import { Component } from 'react';
+import { ClassSection } from './ClassSection';
+import { ClassDogs } from './ClassDogs';
+import { ClassCreateDogForm } from './ClassCreateDogForm';
+import { Requests } from '../api';
+import { TDog, TTab } from '../types';
+import toast from 'react-hot-toast';
+
+export interface ClassAppState {
+  dogs: TDog[];
+  activeTab: TTab;
+  isLoading: boolean;
+}
 
 export class ClassApp extends Component {
-  state = {
+  state: ClassAppState = {
     dogs: [],
-    isFavoriteActive: false,
-    isNotFavoriteActive: false,
-    isCreateDogActive: false,
+    activeTab: 'none',
     isLoading: false,
   };
 
@@ -23,11 +27,11 @@ export class ClassApp extends Component {
     return Requests.getAllDogs().then((dogs) => this.setState({ dogs: dogs }));
   };
 
-  addDog = (dog: Omit<Dog, "id">) => {
+  addDog = (dog: Omit<TDog, 'id'>) => {
     this.setState({ isLoading: true });
     Requests.postDog(dog)
       .then(this.refetchData)
-      .then(() => toast.success("Dog Created"))
+      .then(() => toast.success('Dog Created'))
       .finally(() => this.setState({ isLoading: false }));
   };
 
@@ -45,41 +49,32 @@ export class ClassApp extends Component {
       .finally(() => this.setState({ isLoading: false }));
   };
 
-  handleIsFavoriteActive = (isFavoriteActive: boolean) => {
-    this.setState({ isFavoriteActive: isFavoriteActive });
-  };
-  handleIsNotFavoriteActive = (isNotFavoriteActive: boolean) => {
-    this.setState({ isNotFavoriteActive: isNotFavoriteActive });
-  };
-  handleIsCreateDogActive = (isCreateDogActive: boolean) => {
-    this.setState({ isCreateDogActive: isCreateDogActive });
+  handleActiveTab = (activeTab: TTab) => {
+    this.setState({ activeTab: activeTab });
   };
 
   render() {
     return (
-      <div className="App" style={{ backgroundColor: "goldenrod" }}>
+      <div
+        className='App'
+        style={{ backgroundColor: 'goldenrod' }}
+      >
         <header>
           <h1>pup-e-picker (Class Version)</h1>
         </header>
         <ClassSection
           dogs={this.state.dogs}
-          isFavoriteActive={this.state.isFavoriteActive}
-          handleIsFavoriteActive={this.handleIsFavoriteActive}
-          isNotFavoriteActive={this.state.isNotFavoriteActive}
-          handleIsNotFavoriteActive={this.handleIsNotFavoriteActive}
-          isCreateDogActive={this.state.isCreateDogActive}
-          handleIsCreateDogActive={this.handleIsCreateDogActive}
+          activeTab={this.state.activeTab}
+          handleActiveTab={this.handleActiveTab}
         >
           <ClassDogs
             dogs={this.state.dogs}
             deleteDog={this.deleteDog}
             updateDog={this.updateDog}
-            isFavoriteActive={this.state.isFavoriteActive}
-            isNotFavoriteActive={this.state.isNotFavoriteActive}
-            isCreateDogActive={this.state.isCreateDogActive}
+            activeTab={this.state.activeTab}
             isLoading={this.state.isLoading}
           />
-          {this.state.isCreateDogActive && (
+          {this.state.activeTab === 'createDog' && (
             <ClassCreateDogForm
               addDog={this.addDog}
               isLoading={this.state.isLoading}

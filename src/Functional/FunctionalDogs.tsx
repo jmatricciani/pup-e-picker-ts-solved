@@ -1,25 +1,27 @@
-import { DogCard } from "../Shared/DogCard";
-import { IDisplayDogs } from "../types";
+import { DogCard } from '../Shared/DogCard';
+import { IDisplayDogs } from '../types';
 
 export const FunctionalDogs = ({
   dogs,
   deleteDog,
   updateDog,
-  isFavoriteActive,
-  isNotFavoriteActive,
-  isCreateDogActive,
+  activeTab,
   isLoading,
 }: IDisplayDogs) => {
   return (
-    //  the "<> </>"" are called react fragments, it's like adding all the html inside
-    // without adding an actual html element
     <>
       {dogs
         .filter((dog) => {
-          if (isFavoriteActive) return dog.isFavorite;
-          else if (isNotFavoriteActive) return !dog.isFavorite;
-          else if (isCreateDogActive) return false;
-          else return dog;
+          switch (activeTab) {
+            case 'favorited':
+              return dog.isFavorite;
+            case 'unfavorited':
+              return !dog.isFavorite;
+            case 'createDog':
+              return false;
+            case 'none':
+              return dog;
+          }
         })
         .map((dog) => (
           <DogCard
@@ -31,7 +33,6 @@ export const FunctionalDogs = ({
             onHeartClick={() => {
               updateDog(dog.id, false);
             }}
-            //insert delete method here
             onTrashIconClick={() => {
               deleteDog(dog.id);
             }}

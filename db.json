@@ -25,7 +25,7 @@
       "name": "Gudrun",
       "image": "/assets/blue-heeler.png",
       "description": "faithfully regarding brace why about",
-      "isFavorite": false,
+      "isFavorite": true,
       "id": 3
     },
     {
@@ -46,7 +46,7 @@
       "name": "Rylan",
       "image": "/assets/cowardly.png",
       "description": "senior exception cwtch mmm press dealer accurate leave",
-      "isFavorite": true,
+      "isFavorite": false,
       "id": 6
     },
     {
